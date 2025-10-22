@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  imdtravel:
+    build: ./IMDTravel
+    container_name: imdtravel
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRLINE_URL=http://airlineshub:8081
+      - EXCHANGE_URL=http://exchange:8082
+      - FIDELITY_URL=http://fidelity:8083
+    networks:
+      - imdnet
+    depends_on:
+      - airlineshub
+      - exchange
+      - fidelity
+
+  airlineshub:
+    build: ./AirlinesHub
+    container_name: airlineshub
+    ports:
+      - "8081:8080"
+    networks:
+      - imdnet
+
+  exchange:
+    build: ./Exchange
+    container_name: exchange
+    ports:
+      - "8082:8080"
+    networks:
+      - imdnet
+
+  fidelity:
+    build: ./Fidelity
+    container_name: fidelity
+    ports:
+      - "8083:8080"
+    networks:
+      - imdnet
+
+networks:
+  imdnet:
+    driver: bridge
+
